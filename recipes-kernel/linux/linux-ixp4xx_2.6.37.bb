@@ -14,7 +14,8 @@ PR = "r0"
 
 SRC_URI = "${KERNELORG_MIRROR}/pub/linux/kernel/v2.6/linux-${VANILLA_VERSION}.tar.bz2 \
 	   svn://svn.nslu2-linux.org/svnroot/kernel/trunk/patches;module=${VANILLA_VERSION};proto=http \
-	   file://defconfig-${KERNEL_RELEASE}"
+	   file://defconfig-${KERNEL_RELEASE} \
+	   file://perf-gcc460-build-fixes.patch"
 
 S = "${WORKDIR}/linux-${VANILLA_VERSION}"
 

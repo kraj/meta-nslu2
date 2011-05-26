@@ -1,0 +1,221 @@
+From linux-kernel-owner@vger.kernel.org Mon Jan 24 11:13:12 2011
+Date:	Mon, 24 Jan 2011 11:13:04 -0500
+From:	Kyle McMartin <kyle@mcmartin.ca>
+To:	mingo@redhat.com
+Cc:	linux-kernel@vger.kernel.org, acme@redhat.com
+Subject: [PATCH] perf: fix gcc 4.6.0 issues with tools/perf
+Message-ID: <20110124161304.GK27353@bombadil.infradead.org>
+
+Hi Ingo,
+
+GCC 4.6.0 in Fedora rawhide turned up some compile errors in tools/perf
+due to the -Werror=unused-but-set-variable flag.
+
+I've gone through and annotated some of the assignments that had side
+effects (ie: return value from a function) with the __used annotation,
+and in some cases, just removed unused code.
+
+In a few cases, we were assigning something useful, but not using it in
+later parts of the function.
+
+regards, Kyle
+
+kyle@dreadnought:~/src% gcc --version
+gcc (GCC) 4.6.0 20110122 (Red Hat 4.6.0-0.3)
+
+---
+
+ bench/sched-pipe.c                          |    2 +-
+ builtin-sched.c                             |   12 +++---------
+ builtin-top.c                               |    5 +----
+ util/header.c                               |    2 +-
+ util/hist.c                                 |    3 ---
+ util/scripting-engines/trace-event-python.c |    3 +--
+ util/symbol.c                               |    4 ++--
+ util/trace-event-parse.c                    |    2 +-
+ util/ui/browsers/map.c                      |    2 +-
+ 9 files changed, 11 insertions(+), 24 deletions(-)
+
+Index: linux-2.6.37/tools/perf/bench/sched-pipe.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/bench/sched-pipe.c
++++ linux-2.6.37/tools/perf/bench/sched-pipe.c
+@@ -55,7 +55,7 @@ int bench_sched_pipe(int argc, const cha
+ 	 * discarding returned value of read(), write()
+ 	 * causes error in building environment for perf
+ 	 */
+-	int ret, wait_stat;
++	int __used ret, wait_stat;
+ 	pid_t pid, retpid;
+ 
+ 	argc = parse_options(argc, argv, options,
+Index: linux-2.6.37/tools/perf/builtin-sched.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/builtin-sched.c
++++ linux-2.6.37/tools/perf/builtin-sched.c
+@@ -369,11 +369,6 @@ static void
+ process_sched_event(struct task_desc *this_task __used, struct sched_atom *atom)
+ {
+ 	int ret = 0;
+-	u64 now;
+-	long long delta;
+-
+-	now = get_nsecs();
+-	delta = start_time + atom->timestamp - now;
+ 
+ 	switch (atom->type) {
+ 		case SCHED_EVENT_RUN:
+@@ -561,7 +556,7 @@ static void wait_for_tasks(void)
+ 
+ static void run_one_test(void)
+ {
+-	u64 T0, T1, delta, avg_delta, fluct, std_dev;
++	u64 T0, T1, delta, avg_delta, fluct;
+ 
+ 	T0 = get_nsecs();
+ 	wait_for_tasks();
+@@ -577,7 +572,6 @@ static void run_one_test(void)
+ 	else
+ 		fluct = delta - avg_delta;
+ 	sum_fluct += fluct;
+-	std_dev = sum_fluct / nr_runs / sqrt(nr_runs);
+ 	if (!run_avg)
+ 		run_avg = delta;
+ 	run_avg = (run_avg*9 + delta)/10;
+@@ -798,7 +792,7 @@ replay_switch_event(struct trace_switch_
+ 		    u64 timestamp,
+ 		    struct thread *thread __used)
+ {
+-	struct task_desc *prev, *next;
++	struct task_desc *prev, __used *next;
+ 	u64 timestamp0;
+ 	s64 delta;
+ 
+@@ -1403,7 +1397,7 @@ map_switch_event(struct trace_switch_eve
+ 		 u64 timestamp,
+ 		 struct thread *thread __used)
+ {
+-	struct thread *sched_out, *sched_in;
++	struct thread *sched_out __used, *sched_in;
+ 	int new_shortname;
+ 	u64 timestamp0;
+ 	s64 delta;
+Index: linux-2.6.37/tools/perf/builtin-top.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/builtin-top.c
++++ linux-2.6.37/tools/perf/builtin-top.c
+@@ -180,7 +180,6 @@ static int parse_source(struct sym_entry
+ 	FILE *file;
+ 	char command[PATH_MAX*2];
+ 	const char *path;
+-	u64 len;
+ 
+ 	if (!syme)
+ 		return -1;
+@@ -209,8 +208,6 @@ static int parse_source(struct sym_entry
+ 	}
+ 	path = map->dso->long_name;
+ 
+-	len = sym->end - sym->start;
+-
+ 	sprintf(command,
+ 		"objdump --start-address=%#0*Lx --stop-address=%#0*Lx -dS %s",
+ 		BITS_PER_LONG / 4, map__rip_2objdump(map, sym->start),
+@@ -1263,7 +1260,7 @@ static int __cmd_top(void)
+ {
+ 	pthread_t thread;
+ 	int i, counter;
+-	int ret;
++	int ret __used;
+ 	/*
+ 	 * FIXME: perf_session__new should allow passing a O_MMAP, so that all this
+ 	 * mmap reading, etc is encapsulated in it. Use O_WRONLY for now.
+Index: linux-2.6.37/tools/perf/util/header.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/header.c
++++ linux-2.6.37/tools/perf/util/header.c
+@@ -1113,7 +1113,7 @@ int event__synthesize_tracing_data(int f
+ {
+ 	event_t ev;
+ 	ssize_t size = 0, aligned_size = 0, padding;
+-	int err = 0;
++	int err __used = 0;
+ 
+ 	memset(&ev, 0, sizeof(ev));
+ 
+Index: linux-2.6.37/tools/perf/util/hist.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/hist.c
++++ linux-2.6.37/tools/perf/util/hist.c
+@@ -1091,7 +1091,6 @@ int hist_entry__annotate(struct hist_ent
+ 	char command[PATH_MAX * 2];
+ 	FILE *file;
+ 	int err = 0;
+-	u64 len;
+ 
+ 	if (filename == NULL) {
+ 		if (dso->has_build_id) {
+@@ -1128,8 +1127,6 @@ fallback:
+ 		 filename, sym->name, map->unmap_ip(map, sym->start),
+ 		 map->unmap_ip(map, sym->end));
+ 
+-	len = sym->end - sym->start;
+-
+ 	pr_debug("annotating [%p] %30s : [%p] %30s\n",
+ 		 dso, dso->long_name, sym, sym->name);
+ 
+Index: linux-2.6.37/tools/perf/util/scripting-engines/trace-event-python.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/scripting-engines/trace-event-python.c
++++ linux-2.6.37/tools/perf/util/scripting-engines/trace-event-python.c
+@@ -248,8 +248,7 @@ static void python_process_event(int cpu
+ 	context = PyCObject_FromVoidPtr(scripting_context, NULL);
+ 
+ 	PyTuple_SetItem(t, n++, PyString_FromString(handler_name));
+-	PyTuple_SetItem(t, n++,
+-			PyCObject_FromVoidPtr(scripting_context, NULL));
++	PyTuple_SetItem(t, n++, context);
+ 
+ 	if (handler) {
+ 		PyTuple_SetItem(t, n++, PyInt_FromLong(cpu));
+Index: linux-2.6.37/tools/perf/util/symbol.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/symbol.c
++++ linux-2.6.37/tools/perf/util/symbol.c
+@@ -1481,8 +1481,8 @@ int dso__load(struct dso *self, struct m
+ 			snprintf(name, size, "%s", self->long_name);
+ 			break;
+ 		case DSO__ORIG_GUEST_KMODULE:
+-			if (map->groups && map->groups->machine)
+-				root_dir = map->groups->machine->root_dir;
++			if (map->groups && machine)
++				root_dir = machine->root_dir;
+ 			else
+ 				root_dir = "";
+ 			snprintf(name, size, "%s%s", root_dir, self->long_name);
+Index: linux-2.6.37/tools/perf/util/trace-event-parse.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/trace-event-parse.c
++++ linux-2.6.37/tools/perf/util/trace-event-parse.c
+@@ -153,7 +153,7 @@ void parse_proc_kallsyms(char *file, uns
+ 	char *next = NULL;
+ 	char *addr_str;
+ 	char ch;
+-	int ret;
++	int ret __used;
+ 	int i;
+ 
+ 	line = strtok_r(file, "\n", &next);
+Index: linux-2.6.37/tools/perf/util/ui/browsers/map.c
+===================================================================
+--- linux-2.6.37.orig/tools/perf/util/ui/browsers/map.c
++++ linux-2.6.37/tools/perf/util/ui/browsers/map.c
+@@ -40,7 +40,7 @@ static int ui_entry__read(const char *ti
+ out_free_form:
+ 	newtPopWindow();
+ 	newtFormDestroy(form);
+-	return 0;
++	return err;
+ }
+ 
+ struct map_browser {
