@@ -19,7 +19,7 @@ do_compile() {
 	${CC} -Wall IxNpeMicrocode.c -o IxNpeMicrocode
 }
 do_install() {
-        install -d ${D}/${bindir}/
-        install -m 0755 ${S}/IxNpeMicrocode ${D}/${bindir}/IxNpeMicrocode-${PV}
+        install -d ${D}${bindir}/
+        install -m 0755 ${S}/IxNpeMicrocode ${D}${bindir}/IxNpeMicrocode-${PV}
 }
 

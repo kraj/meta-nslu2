@@ -1,6 +1,6 @@
 DESCRIPTION = "NPE firmware for the IXP4xx line of devices"
 LICENSE = "Intel"
-PR = "r0"
+PR = "r1"
 DEPENDS = "ixp4xx-npe-native"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/Intel;md5=a1e183d5eb93b863adda0cb64e77a673"
 
@@ -21,26 +21,24 @@ S = "${WORKDIR}/ixp400_xscale_sw/src/npeDl"
 
 COMPATIBLE_MACHINE = "(nslu2|ixp4xx|kixrp435)"
 
-FILES_${PN} = "${base_libdir}/firmware/NPE-B ${base_libdir}/firmware/NPE-C"
-
 do_compile() {
 	IxNpeMicrocode-${PV} -be
 }
 
 do_install() {
-	install -d ${D}/firmware/
+	install -d ${D}${base_libdir}/firmware/
 	rm ${S}/NPE-B
 	mv ${S}/NPE-B.* ${S}/NPE-B
-	install ${S}/NPE-B ${D}/firmware/
+	install ${S}/NPE-B ${D}${base_libdir}/firmware/
 	rm ${S}/NPE-C
 	mv ${S}/NPE-C.* ${S}/NPE-C
-	install ${S}/NPE-C ${D}/firmware/
-	install -d ${D}/${datadir}/common-licenses/
+	install ${S}/NPE-C ${D}${base_libdir}/firmware/
+	install -d ${D}${datadir}/common-licenses/
 	install -m 0644 ${WORKDIR}/Intel ${D}${datadir}/common-licenses/
 }
 
 sysroot_stage_all_append() {
-        sysroot_stage_dir ${D}/firmware ${SYSROOT_DESTDIR}/firmware
+        sysroot_stage_dir ${D}${base_libdir}/firmware ${STAGING_FIRMWARE_DIR}
 }
 
-FILES_${PN} += "/firmware/NPE-B /firmware/NPE-C"
+FILES_${PN} += "${base_libdir}/firmware/NPE-B ${base_libdir}/firmware/NPE-C"
