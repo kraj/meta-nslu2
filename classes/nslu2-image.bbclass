@@ -5,7 +5,7 @@ nslu2_pack_image () {
 		-k ${DEPLOY_DIR_IMAGE}/zImage-${MACHINE}.bin \
 		-L ${STAGING_DIR_HOST}/loader/apex-nslu2.bin \
 		-r Flashdisk:${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.jffs2 \
-		-m ${STAGING_DIR_HOST}/firmware/NPE-B \
+		-m ${STAGING_FIRMWARE_DIR}/NPE-B \
 		-t ${STAGING_LIBDIR}/nslu2-binaries/Trailer \
 		-o ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}-nslu2.bin
 	slugimage -F -p \
@@ -14,7 +14,7 @@ nslu2_pack_image () {
 		-k ${DEPLOY_DIR_IMAGE}/zImage-${MACHINE}.bin \
 		-L ${STAGING_DIR_HOST}/loader/apex-nslu2-16mb.bin \
 		-r Flashdisk:${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.jffs2 \
-		-m ${STAGING_DIR_HOST}/firmware/NPE-B \
+		-m ${STAGING_FIRMWARE_DIR}/NPE-B \
 		-t ${STAGING_LIBDIR}/nslu2-binaries/Trailer \
 		-o ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}-nslu2-16mb.bin
 }
