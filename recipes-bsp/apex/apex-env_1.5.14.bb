@@ -9,7 +9,7 @@ SRC_URI = "ftp://ftp.buici.com/pub/apex/apex-${PV}.tar.gz \
 	file://find-apex-partition.patch \
 	file://invalid-conversion.patch \
 	"
-S = ${WORKDIR}/apex-${PV}/usr
+S = "${WORKDIR}/apex-${PV}/usr"
 
 oe_runmake() {
 	oenote make ${PARALLEL_MAKE} LDFLAGS=${LDFLAGS} CROSS_COMPILE=${TARGET_PREFIX} "$@"
