@@ -13,7 +13,7 @@ PV = "${KERNEL_RELEASE}+svnr${SRCPV}"
 PR = "r0"
 
 SRC_URI = "${KERNELORG_MIRROR}/pub/linux/kernel/v2.6/linux-${VANILLA_VERSION}.tar.bz2 \
-	   svn://svn.nslu2-linux.org/svnroot/kernel/trunk/patches;module=${VANILLA_VERSION};proto=http \
+	   svn://svn.nslu2-linux.org/svnroot/kernel/trunk/patches;module=${VANILLA_VERSION};protocol=http \
 	   file://fix-install.patch \
 	   file://defconfig-${KERNEL_RELEASE}"
 
