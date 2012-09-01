@@ -1,4 +1,4 @@
-require linux.inc
+require recipes-kernel/linux/linux.inc
 require linux-ixp4xx.inc
 
 DEFAULT_PREFERENCE = "-1"
