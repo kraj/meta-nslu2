@@ -1,0 +1,52 @@
+From 512c9a113e80d10d72b78a7dfb980e66a90ca1e7 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sun, 16 Jun 2013 05:34:51 -0700
+Subject: [PATCH] some more dangling references to 'aliases' replaced with
+ 'variables'.
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/drivers/drv-fis.c             |    2 +-
+ src/mach-ixp42x/variation-nslu2.c |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/drivers/drv-fis.c b/src/drivers/drv-fis.c
+index ebcc031..cf54dca 100644
+--- a/src/drivers/drv-fis.c
++++ b/src/drivers/drv-fis.c
+@@ -190,7 +190,7 @@ static inline unsigned long swab32(unsigned long l)
+ 
+ static inline const char* block_driver (void)
+ {
+-  return lookup_alias_or_env ("fis-drv", CONFIG_DRIVER_FIS_BLOCKDEVICE);
++  return lookup_variable_or_env ("fis-drv", CONFIG_DRIVER_FIS_BLOCKDEVICE);
+ }
+ 
+ static inline int deleted_entry (struct fis_descriptor* partition)
+diff --git a/src/mach-ixp42x/variation-nslu2.c b/src/mach-ixp42x/variation-nslu2.c
+index 609cddf..dcb978f 100644
+--- a/src/mach-ixp42x/variation-nslu2.c
++++ b/src/mach-ixp42x/variation-nslu2.c
+@@ -21,9 +21,9 @@
+ */
+ 
+ #include <config.h>
+-#include <alias.h>
+ #include <service.h>
+ #include <apex.h>
++#include <variables.h>
+ 
+ #include "hardware.h"
+ 
+@@ -32,7 +32,7 @@ static void variation_init (void)
+   int button_pressed = (GPIO_INR & (1<<GPIO_I_POWERBUTTON)) != 0;
+ 
+   if (button_pressed)
+-    alias_set ("variation", CONFIG_VARIATION_SUFFIX);
++    variable_set ("variation", CONFIG_VARIATION_SUFFIX);
+ 
+   MASK_AND_SET (GPIO_OUTR, 1<<GPIO_I_LEDSTATUS,
+ 		button_pressed ? (1<<GPIO_I_LEDSTATUS): 0);
+-- 
+1.7.9.5
+
