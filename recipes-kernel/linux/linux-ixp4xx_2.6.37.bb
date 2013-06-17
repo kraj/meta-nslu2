@@ -12,7 +12,7 @@ KERNEL_RELEASE = "2.6.37"
 PV = "${KERNEL_RELEASE}+svnr${SRCPV}"
 PR = "r1"
 
-SRC_URI = "${KERNELORG_MIRROR}/pub/linux/kernel/v2.6/linux-${VANILLA_VERSION}.tar.bz2 \
+SRC_URI = "${KERNELORG_MIRROR}/linux/kernel/v2.6/linux-${VANILLA_VERSION}.tar.bz2 \
 	   svn://svn.nslu2-linux.org/svnroot/kernel/trunk/patches;module=${VANILLA_VERSION};protocol=http \
 	   file://defconfig-${KERNEL_RELEASE} \
 	   file://perf-gcc460-build-fixes.patch \
