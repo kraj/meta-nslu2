@@ -2,7 +2,7 @@ DESCRIPTION = "APEX Boot Loader"
 SECTION = "misc"
 PRIORITY = "optional"
 HOMEPAGE = "http://wiki.buici.com/twiki/bin/view/Main/ApexBootloader"
-LICENSE = "GPL"
+LICENSE = "GPL-2.0"
 PR = "r4"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
