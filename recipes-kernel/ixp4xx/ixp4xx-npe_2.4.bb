@@ -48,7 +48,9 @@ do_install_class-native () {
         install -d ${D}${bindir}/
         install -m 0755 ${S}/IxNpeMicrocode ${D}${bindir}/IxNpeMicrocode-${PV}
 }
-
+sysroot_stage_all_append_class-target () {
+	sysroot_stage_dir ${D}${base_libdir}/firmware ${STAGING_FIRMWARE_DIR}
+}
 FILES_${PN} += "${base_libdir}/firmware/NPE-B ${base_libdir}/firmware/NPE-C"
 
 BBCLASSEXTEND = "native"

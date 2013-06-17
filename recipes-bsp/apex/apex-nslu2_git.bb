@@ -67,6 +67,10 @@ do_install() {
 	fi
 }
 
+sysroot_stage_all_append() {
+	sysroot_stage_dir ${D}/loader ${SYSROOT_DESTDIR}/loader
+}
+
 FILES_${PN} += "/loader/apex-nslu2.bin"
 
 SRC_URI[md5sum] = "22fb46e76c8221c7bcc9734602367460"
