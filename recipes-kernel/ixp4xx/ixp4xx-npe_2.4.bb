@@ -17,8 +17,8 @@ SRC_URI = "\
            file://Intel \
            file://IxNpeMicrocode.h \
            "
-SRC_URI[npelib.md5sum] = "d41077de409a6b2aaacf4c435e539586"
-SRC_URI[npelib.sha256sum] = "6e1d02b7c859cf5905f472220c17bf35df3e5ba54424a44390b35795a94dc715"
+SRC_URI[npelib.md5sum] = "9a6dc3846041b899edf9eff8a906fb11"
+SRC_URI[npelib.sha256sum] = "f764d0554e236357fc55d128a012cb6ac2ceb638023f4af88c8f509511f209fd"
 
 S = "${WORKDIR}/ixp400_xscale_sw/src/npeDl"
 
