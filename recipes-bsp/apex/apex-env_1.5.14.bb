@@ -1,8 +1,10 @@
 DESCRIPTION = "APEX Boot Loader Environment User Modification Tool"
 SECTION = "misc"
 PRIORITY = "optional"
-HOMEPAGE = "http://wiki.buici.com/twiki/bin/view/Main/ApexBootloader"
-LICENSE = "GPL"
+HOMEPAGE = "http://wiki.buici.com/xwiki/bin/view/Apex+Boot+Loader/WebHome"
+LICENSE = "GPL-2.0"
+LIC_FILES_CHKSUM = "file://../COPYING;md5=751419260aa954499f7abaabaa882bbe"
+
 PR = "r2"
 
 SRC_URI = "ftp://ftp.buici.com/pub/apex/apex-${PV}.tar.gz \
