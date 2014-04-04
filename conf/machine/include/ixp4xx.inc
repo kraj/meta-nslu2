@@ -16,7 +16,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS ?= "ixp4xx-npe"
 ROOT_FLASH_SIZE ?= "12"
 
 # Allow for rootfs loaded direct from internal hard disk
-IMAGE_FSTYPES ?= "jffs2 tar.gz"
+IMAGE_FSTYPES ?= "jffs2 tar.xz"
 
 # Set default for common ixp4xx-based machines
 EXTRA_IMAGECMD_jffs2 = "--pad --eraseblock=0x20000 -n"
