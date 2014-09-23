@@ -22,7 +22,7 @@ SRC_URI[npelib.sha256sum] = "f764d0554e236357fc55d128a012cb6ac2ceb638023f4af88c8
 
 S = "${WORKDIR}/ixp400_xscale_sw/src/npeDl"
 
-COMPATIBLE_MACHINE = "(nslu2|ixp4xx|kixrp435)"
+COMPATIBLE_MACHINE = "(nslu2|ixp4xx|kixrp435)*"
 
 do_compile_class-target () {
 	IxNpeMicrocode-${PV} -be
