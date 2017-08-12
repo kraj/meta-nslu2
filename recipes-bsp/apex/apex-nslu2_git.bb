@@ -19,7 +19,7 @@ SRC_URI = "git://github.com/beewoolie/apex.git;protocol=git;branch=master \
 	   file://defconfig"
 S = "${WORKDIR}/git"
 
-CMDLINE_CONSOLE = "console=${@bb.data.getVar("KERNEL_CONSOLE",d,1) or "ttyS0"}"
+CMDLINE_CONSOLE = "console=${@d.getVar('KERNEL_CONSOLE') or "ttyS0"}"
 
 CMDLINE_ROOT  ?= "root=/dev/mtdblock4 rootfstype=jffs2 rw"
 

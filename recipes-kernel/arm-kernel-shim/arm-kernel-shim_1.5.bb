@@ -20,7 +20,7 @@ S = "${WORKDIR}/arm-kernel-shim-${PV}"
 
 inherit siteinfo
 
-CMDLINE_CONSOLE = "console=${@bb.data.getVar("KERNEL_CONSOLE",d,1) or "ttyS0"}"
+CMDLINE_CONSOLE = "console=${@d.getVar('KERNEL_CONSOLE') or "ttyS0"}"
 
 CMDLINE_ROOT_DSMG600 = "root=/dev/mtdblock2 rootfstype=jffs2 rootflags=noatime rw init=/linuxrc"
 CMDLINE_ROOT_NAS100D = "root=/dev/mtdblock2 rootfstype=jffs2 rootflags=noatime rw init=/linuxrc"

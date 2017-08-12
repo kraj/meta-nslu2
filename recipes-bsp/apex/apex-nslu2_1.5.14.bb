@@ -15,7 +15,7 @@ SRC_URI = "ftp://ftp.buici.com/pub/apex/apex-${PV}.tar.gz \
 	   file://defconfig"
 S = "${WORKDIR}/apex-${PV}"
 
-CMDLINE_CONSOLE = "console=${@bb.data.getVar("KERNEL_CONSOLE",d,1) or "ttyS0"}"
+CMDLINE_CONSOLE = "console=${@d.getVar('KERNEL_CONSOLE') or "ttyS0"}"
 
 CMDLINE_ROOT  ?= "root=/dev/mtdblock4 rootfstype=jffs2 rw"
 
